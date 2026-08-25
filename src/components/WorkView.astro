@@ -1,0 +1,74 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+import { routes, statusLabels, ui } from '../data/site';
+import type { Locale, ProjectStatus } from '../lib/types';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const r = routes[locale];
+const t = ui[locale];
+const projects = (await getCollection('projects', ({ data }) => data.locale === locale)).sort((a,b) => a.data.order - b.data.order);
+const casePath = (slug: string) => locale === 'en' ? `/work/${slug}` : `/fr/projets/${slug}`;
+const experiments: Array<{ status: ProjectStatus; title: string; summary: string; stack: string }> = locale === 'en' ? [
+  { status: 'Prototype', title: 'RE Dashboard', summary: 'A live reliability control room with simulated telemetry, fleet health and intervention history.', stack: 'React · Vite · telemetry simulation' },
+  { status: 'Prototype', title: 'Factory Brain Journey', summary: 'A guided 3D narrative from a blind factory and data silos to a connected plant knowledge graph.', stack: 'React Three Fiber · Three.js · Vitest' },
+  { status: 'Published', title: 'AI Readiness Score', summary: 'A 13-question assessment across data, digital, value, people and governance with a practical roadmap.', stack: 'HTML · JavaScript · Supabase' },
+  { status: 'Internal tool', title: 'Maturity Assessment', summary: 'A standards-grounded maintenance maturity radar designed to support structured site conversations.', stack: 'HTML · JavaScript · radar visualisation' },
+  { status: 'Published', title: 'Value Calculator', summary: 'An editable model that compares manual and AI-assisted time across reliability deliverables.', stack: 'HTML · JavaScript · deterministic model' },
+  { status: 'Prototype', title: 'Property Research Agent', summary: 'A privacy-safe example of a configurable research agent, scoring workflow and local decision dashboard.', stack: 'Agentic research · local data · HTML' },
+  { status: 'Archived', title: 'Fix My Plant', summary: 'The first playable maintenance-game concept, later superseded by the complete Keep It Running campaign.', stack: 'Next.js · Phaser · TypeScript' }
+] : [
+  { status: 'Prototype', title: 'RE Dashboard', summary: 'Une control room de fiabilité avec télémétrie simulée, santé de flotte et historique des interventions.', stack: 'React · Vite · simulation télémétrique' },
+  { status: 'Prototype', title: 'Factory Brain Journey', summary: 'Un récit 3D guidé, de l’usine aveugle et ses silos à un graphe de connaissance industriel connecté.', stack: 'React Three Fiber · Three.js · Vitest' },
+  { status: 'Published', title: 'AI Readiness Score', summary: 'Une évaluation en 13 questions sur la data, le digital, la valeur, les équipes et la gouvernance, avec roadmap.', stack: 'HTML · JavaScript · Supabase' },
+  { status: 'Internal tool', title: 'Maturity Assessment', summary: 'Un radar de maturité maintenance fondé sur les standards pour structurer les échanges sur site.', stack: 'HTML · JavaScript · radar' },
+  { status: 'Published', title: 'Value Calculator', summary: 'Un modèle éditable comparant le temps manuel et assisté par IA pour les livrables de fiabilité.', stack: 'HTML · JavaScript · modèle déterministe' },
+  { status: 'Prototype', title: 'Agent de recherche immobilière', summary: 'Un exemple anonymisé d’agent configurable, de scoring et de tableau de décision local.', stack: 'Recherche agentique · données locales · HTML' },
+  { status: 'Archived', title: 'Fix My Plant', summary: 'Le premier concept de jeu maintenance, ensuite remplacé par la campagne complète Keep It Running.', stack: 'Next.js · Phaser · TypeScript' }
+];
+const copy = locale === 'en' ? {
+  eyebrow: 'Selected work', title: 'Engineering systems, not demo theatre.',
+  intro: 'Each featured project starts with a real reliability workflow. The software is the leverage; evidence, traceability and engineering ownership remain the product.',
+  note: 'Case studies separate published work, internal tools, prototypes and archived experiments.',
+  experiments: 'Additional builds', experimentsCopy: 'Smaller experiments that demonstrate range without pretending every prototype is a production product.',
+  cta: 'Interested in the thinking behind the work?', ctaCopy: 'The most useful conversation starts with the industrial problem, not the technology.'
+} : {
+  eyebrow: 'Projets sélectionnés', title: 'Des systèmes d’ingénierie, pas du théâtre de démo.',
+  intro: 'Chaque projet phare part d’un vrai workflow de fiabilité. Le logiciel apporte le levier ; les preuves, la traçabilité et la responsabilité de l’ingénieur restent le produit.',
+  note: 'Les études de cas distinguent clairement travaux publiés, outils internes, prototypes et archives.',
+  experiments: 'Autres réalisations', experimentsCopy: 'Des expérimentations plus petites qui montrent l’étendue des compétences sans faire passer chaque prototype pour un produit industriel.',
+  cta: 'La réflexion derrière ces projets vous intéresse ?', ctaCopy: 'La conversation utile commence par le problème industriel, pas par la technologie.'
+};
+---
+
+<header class="page-hero">
+  <div class="container">
+    <p class="eyebrow">{copy.eyebrow}</p>
+    <h1>{copy.title}</h1>
+    <p class="lead">{copy.intro}</p>
+    <p class="filters-note">{copy.note}</p>
+  </div>
+</header>
+
+<section class="section section-dark">
+  <div class="container project-grid">
+    {projects.map(project => <ProjectCard project={project} locale={locale} href={casePath(project.data.slug)} headingLevel="h2" />)}
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head"><div><p class="eyebrow">Lab / archive</p><h2>{copy.experiments}</h2><p class="lead">{copy.experimentsCopy}</p></div></div>
+    <div class="experiment-grid">
+      {experiments.map(item => <article class="experiment"><span class="status" style="color:var(--cyan-shade);border-color:var(--steel);background:var(--paper)">{statusLabels[locale][item.status]}</span><h3>{item.title}</h3><p>{item.summary}</p><div class="stack">{item.stack}</div></article>)}
+    </div>
+  </div>
+</section>
+
+<section class="section-compact">
+  <div class="container cta-panel">
+    <div><h2>{copy.cta}</h2><p>{copy.ctaCopy}</p></div>
+    <a class="button button-primary" href={r.contact}>{t.contactCta}</a>
+  </div>
+</section>

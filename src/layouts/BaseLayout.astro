@@ -1,0 +1,76 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site, ui } from '../data/site';
+import type { Locale } from '../lib/types';
+import '../styles/global.css';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  englishPath: string;
+  frenchPath: string;
+  image?: string;
+  imageAlt?: string;
+  pageType?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const {
+  locale, title, description, englishPath, frenchPath,
+  image = '/images/og-josselin-bohler.jpg', imageAlt = 'Josselin Bohler', pageType = 'website', noindex = false
+} = Astro.props;
+const path = locale === 'en' ? englishPath : frenchPath;
+const canonical = new URL(path, Astro.site);
+const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
+const t = ui[locale];
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: 'https://josselinbohler.com',
+  image: 'https://josselinbohler.com/images/josselin-bohler.webp',
+  jobTitle: 'Lead Reliability Engineer',
+  knowsAbout: [
+    'Reliability engineering', 'Industrial maintenance', 'FMECA', 'Root cause analysis',
+    'Reliability centred maintenance', 'Weibull analysis', 'RAM modelling', 'Industrial AI'
+  ],
+  sameAs: [site.linkedin, site.github]
+};
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#F5F8FB" />
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={new URL(englishPath, Astro.site)} />
+    <link rel="alternate" hreflang="fr" href={new URL(frenchPath, Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(englishPath, Astro.site)} />
+    <meta property="og:type" content={pageType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, Astro.site)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <title>{fullTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{t.skip}</a>
+    <Header locale={locale} currentPath={path} englishPath={englishPath} frenchPath={frenchPath} />
+    <main id="main-content"><slot /></main>
+    <Footer locale={locale} />
+  </body>
+</html>

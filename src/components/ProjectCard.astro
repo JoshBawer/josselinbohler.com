@@ -1,0 +1,26 @@
+---
+import { statusLabels } from '../data/site';
+import type { CollectionEntry } from 'astro:content';
+import type { Locale } from '../lib/types';
+
+interface Props { project: CollectionEntry<'projects'>; locale: Locale; href: string; headingLevel?: 'h2' | 'h3'; }
+const { project, locale, href, headingLevel = 'h3' } = Astro.props;
+const p = project.data;
+const avifCover = p.cover.replace(/\.webp$/, '.avif');
+const Heading = headingLevel;
+---
+
+<article class="project-card">
+  <div class="project-card-media">
+    <picture><source srcset={avifCover} type="image/avif" /><img src={p.cover} alt={p.coverAlt} loading="lazy" width="1600" height="1000" /></picture>
+  </div>
+  <div class="project-card-content">
+    <div class="project-meta">
+      <span class="status">{statusLabels[locale][p.status]}</span>
+      <span class="project-year">{p.year}</span>
+    </div>
+    <Heading>{p.title}</Heading>
+    <p>{p.summary}</p>
+  </div>
+  <a href={href} aria-label={`${p.title} — ${locale === 'en' ? 'Read case study' : 'Voir l’étude de cas'}`}></a>
+</article>

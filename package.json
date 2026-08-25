@@ -1,0 +1,27 @@
+{
+  "name": "josselinbohler-com",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm run audit:content && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "npm run check && npm run build && npm run test:e2e",
+    "test:e2e": "playwright test",
+    "audit:content": "node scripts/audit-content.mjs",
+    "audit:lighthouse": "lhci autorun"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "5.18.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.62.1",
+    "typescript": "^6.0.3"
+  }
+}

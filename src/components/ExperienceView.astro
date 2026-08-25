@@ -1,0 +1,83 @@
+---
+import { getCollection } from 'astro:content';
+import { routes, ui } from '../data/site';
+import type { Locale } from '../lib/types';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const entries = (await getCollection('experience', ({ data }) => data.locale === locale)).sort((a,b) => a.data.order - b.data.order);
+const r = routes[locale];
+const t = ui[locale];
+const c = locale === 'en' ? {
+  eyebrow: 'Experience', title: 'Fifteen years between the model and the machine.',
+  intro: 'My career moved from gas-turbine engineering to site reliability, mining asset strategy and international reliability programmes. That range is what makes the AI work practical: I know where the data comes from and what a field team can actually use.',
+  download: 'Download CV', enCv: 'English PDF', frCv: 'French PDF',
+  capabilities: 'Capabilities', capCopy: 'The methods, systems and operating experience I bring into a project.',
+  skills: [
+    ['Reliability & maintenance', ['FMECA / FMEA', 'RCA: Apollo, 5-Why, Ishikawa', 'RCM & maintenance strategy', 'Weibull & life data', 'RBD / RAM / Monte Carlo', 'Criticality & bad actors']],
+    ['Data, AI & systems', ['Python & SQL', 'AI-assisted engineering', 'CMMS data quality', 'SAP PM', 'OnePM & Cordant', 'AvSim & AWB Workbench']],
+    ['Equipment & operations', ['Gas and steam turbines', 'Compressors & pumps', 'Crushers, HPGR & conveyors', 'Boilers & generators', 'Shutdowns & outages', 'Rotating equipment']],
+    ['Leadership', ['International project delivery', 'Workshop facilitation', 'Technical training', 'Multidisciplinary teams', 'Stakeholder communication', 'English & French bilingual']]
+  ],
+  education: 'Education & professional recognition', edu: [
+    ['M.Eng Mechanical Engineering', 'EI.CESI, France · 2007–2010 · Graduated with honours'],
+    ['Mechanical / Industrial recognition', 'Engineers Australia · 2016'],
+    ['Thermal Engineering & Energy', 'DUT Génie Thermique et Énergie']
+  ]
+} : {
+  eyebrow: 'Expérience', title: 'Quinze ans entre le modèle et la machine.',
+  intro: 'Mon parcours va de l’ingénierie des turbines à gaz à la fiabilité sur site, la stratégie d’actifs miniers et les programmes internationaux. C’est ce qui rend mon travail sur l’IA concret : je sais d’où vient la donnée et ce qu’une équipe terrain peut réellement utiliser.',
+  download: 'Télécharger le CV', enCv: 'PDF anglais', frCv: 'PDF français',
+  capabilities: 'Compétences', capCopy: 'Les méthodes, systèmes et expériences opérationnelles que j’apporte à un projet.',
+  skills: [
+    ['Fiabilité & maintenance', ['AMDEC / FMECA', 'RCA : Apollo, 5 Why, Ishikawa', 'RCM & stratégie maintenance', 'Weibull & données de vie', 'RBD / RAM / Monte Carlo', 'Criticité & bad actors']],
+    ['Data, IA & systèmes', ['Python & SQL', 'Ingénierie assistée par IA', 'Qualité des données GMAO', 'SAP PM', 'OnePM & Cordant', 'AvSim & AWB Workbench']],
+    ['Équipements & opérations', ['Turbines à gaz et vapeur', 'Compresseurs & pompes', 'Concasseurs, HPGR & convoyeurs', 'Chaudières & groupes diesel', 'Arrêts majeurs', 'Équipements tournants']],
+    ['Leadership', ['Pilotage international', 'Animation d’ateliers', 'Formation technique', 'Équipes multidisciplinaires', 'Communication parties prenantes', 'Anglais & français bilingue']]
+  ],
+  education: 'Formation & reconnaissance professionnelle', edu: [
+    ['Diplôme d’ingénieur mécanique', 'EI.CESI, France · 2007–2010 · Diplômé avec mention'],
+    ['Reconnaissance mécanique / industrie', 'Engineers Australia · 2016'],
+    ['DUT Génie Thermique & Énergie', 'Formation technique supérieure']
+  ]
+};
+---
+
+<header class="page-hero">
+  <div class="container experience-intro">
+    <div><p class="eyebrow">{c.eyebrow}</p><h1>{c.title}</h1><p class="lead">{c.intro}</p></div>
+    <div>
+      <p class="eyebrow">{c.download}</p>
+      <div class="button-row">
+        <a class="button button-primary" href="/downloads/josselin-bohler-cv-en.pdf" download>{c.enCv}</a>
+        <a class="button button-secondary" href="/downloads/josselin-bohler-cv-fr.pdf" download>{c.frCv}</a>
+      </div>
+      <p class="muted" style="margin-top:20px">{locale === 'en' ? 'France based · Internationally mobile · FIFO experienced' : 'Basé en France · Mobilité internationale · Expérience FIFO'}</p>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head"><div><p class="eyebrow">Career</p><h2>{locale === 'en' ? 'Professional experience' : 'Parcours professionnel'}</h2></div></div>
+    <div class="experience-list">
+      {entries.map(({ data: e }) => <article class="experience-item"><div><p class="period">{e.period}</p><p class="location">{e.location}</p></div><div><h2>{e.role}</h2><h3>{e.company}</h3><p>{e.summary}</p><ul>{e.achievements.map(item => <li>{item}</li>)}</ul>{e.contexts && <div class="context-strip">{e.contexts.map(item => <span>{item}</span>)}</div>}</div></article>)}
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--white)">
+  <div class="container">
+    <div class="section-head"><div><p class="eyebrow">Toolkit</p><h2>{c.capabilities}</h2><p class="lead">{c.capCopy}</p></div></div>
+    <div class="skill-columns">{c.skills.map(([title, items]) => <div class="skill-group"><h3>{title}</h3><ul>{(items as string[]).map(item => <li>{item}</li>)}</ul></div>)}</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="eyebrow">Education</p><h2>{c.education}</h2>
+    <div class="timeline">{c.edu.map(([title, detail]) => <div class="timeline-row"><div class="timeline-period">Qualification</div><div class="timeline-role"><strong>{title}</strong></div><div class="timeline-summary">{detail}</div></div>)}</div>
+    <div class="button-row no-print"><a class="button button-primary" href={r.contact}>{t.contactCta}</a></div>
+  </div>
+</section>
+

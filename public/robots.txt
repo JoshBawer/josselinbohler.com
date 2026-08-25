@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://josselinbohler.com/sitemap-index.xml
+

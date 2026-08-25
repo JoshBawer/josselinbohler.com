@@ -1,0 +1,9 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import InsightView from '../../../components/InsightView.astro';
+const insight = (await getCollection('insights', ({ data }) => data.locale === 'fr'))[0];
+---
+<BaseLayout locale="fr" title={insight.data.title} description={insight.data.summary} englishPath="/insights/living-reliability" frenchPath="/fr/idees/strategie-fiabilite-vivante" pageType="article">
+  <InsightView insight={insight} locale="fr" />
+</BaseLayout>

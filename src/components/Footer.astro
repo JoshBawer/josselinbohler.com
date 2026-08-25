@@ -1,0 +1,42 @@
+---
+import { routes, site, ui } from '../data/site';
+import type { Locale } from '../lib/types';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = ui[locale];
+const r = routes[locale];
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <p class="footer-title">Josselin Bohler</p>
+        <p class="footer-copy">{t.footerLine}</p>
+      </div>
+      <div>
+        <p class="footer-label">Navigate</p>
+        <div class="footer-links">
+          <a href={r.work}>{t.nav.work}</a>
+          <a href={r.experience}>{t.nav.experience}</a>
+          <a href={r.insight}>{t.nav.insight}</a>
+          <a href={r.contact}>{t.nav.contact}</a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-label">Connect</p>
+        <div class="footer-links">
+          <a href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+          <a href={site.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a href={r.privacy}>{t.privacy}</a>
+          <a href={r.legal}>{t.legal}</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© {new Date().getFullYear()} Josselin Bohler. {t.rights}</span>
+      <span>{locale === 'en' ? 'Built with restraint. No tracking.' : 'Conçu avec sobriété. Aucun tracking.'}</span>
+    </div>
+  </div>
+</footer>
+

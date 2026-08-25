@@ -1,0 +1,156 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+import { routes, ui } from '../data/site';
+import type { Locale } from '../lib/types';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = ui[locale];
+const r = routes[locale];
+const projects = (await getCollection('projects', ({ data }) => data.locale === locale && data.featured))
+  .sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+const casePath = (slug: string) => locale === 'en' ? `/work/${slug}` : `/fr/projets/${slug}`;
+const causalNodes = locale === 'en'
+  ? ['Function', 'Failure mode', 'Mechanism', 'Cause', 'Consequence', 'Task']
+  : ['Fonction', 'Mode de défaillance', 'Mécanisme', 'Cause', 'Conséquence', 'Tâche'];
+
+const c = locale === 'en' ? {
+  role: 'Lead Reliability Engineer · AI builder · Founder, Reliability Factory',
+  titleA: 'Reliability, built for', titleB: 'the real world.',
+  intro: 'I connect fifteen years of field reliability with modern data and AI engineering. The goal is simple: better industrial decisions, stronger maintenance strategies and tools that hold up outside the demo.',
+  metric: [['15+', 'years in industrial reliability'], ['140 MWth', 'plant performance responsibility'], ['$6M+', 'long-term service agreement managed'], ['≈7,000', 'reliability professionals reached']],
+  intersection: 'One profile. Three disciplines.',
+  intersectionCopy: 'The hardest industrial problems rarely stay inside one discipline. My work connects engineering judgement, operating reality and software leverage.',
+  pillars: [
+    ['01', 'Reliability engineering', 'FMECA, RCA, RCM, Weibull, RAM and asset strategy — from source data to decisions that teams can implement.'],
+    ['02', 'Industrial operations', 'Hands-on experience across mining, LNG, power, petrochemical and heavy industry, on site and in the engineering office.'],
+    ['03', 'AI & product building', 'Purpose-built applications, knowledge systems and automations that remove clerical work without removing engineering ownership.']
+  ],
+  selected: 'Selected work', selectedCopy: 'A focused selection of systems built around real reliability workflows — evidence, traceability and human judgement included.',
+  career: 'Built on field experience', careerCopy: 'From gas-turbine design and power-plant operations to international asset strategy programmes and industrial AI.',
+  timeline: [
+    ['2023 — now', 'Lead Reliability Engineer', 'Baker Hughes · ARMS Reliability', 'International reliability, production availability, maintenance strategy and AI-enabled engineering.'],
+    ['2019 — 2023', 'Performance & Reliability Engineer', 'Dalkia', 'Performance and reliability of a 140 MWth biomass plant; CMMS, RCA and improvement projects.'],
+    ['2017 — 2019', 'Maintenance Reliability Engineer', 'ARMS Reliability · Australia', 'Mining asset strategies, FMECA, Weibull, Apollo RCA and SAP-ready maintenance plans.'],
+    ['2015 — 2017', 'Power Plant Reliability Engineer', 'Koniambo Nickel', 'Two 40 MW gas turbines, four diesel generators, outages, troubleshooting and LTSA management.'],
+    ['2011 — 2015', 'Mechanical Engineer', 'Capgemini · Safran programmes', 'Mechanical design, FEA and reliability of gas-turbine components.']
+  ],
+  thinking: 'The strategy should stay alive.',
+  thinkingCopy: 'FMECA, RCA, RCM and Weibull are not isolated documents. They are different readings of one causal map — a map that AI can finally help engineers keep current.',
+  contexts: 'Selected environments',
+  cta: 'A role, project or partnership worth discussing?',
+  ctaCopy: 'If the work sits at the intersection of industrial reliability, data and practical AI, I am always open to a focused conversation.'
+} : {
+  role: 'Ingénieur référent fiabilité · AI builder · Fondateur, Reliability Factory',
+  titleA: 'La fiabilité, conçue pour', titleB: 'le monde réel.',
+  intro: 'Je relie quinze ans de fiabilité terrain aux possibilités actuelles de la data et de l’IA. L’objectif est simple : de meilleures décisions industrielles, des stratégies de maintenance robustes et des outils qui fonctionnent hors des démonstrations.',
+  metric: [['15+', 'ans en fiabilité industrielle'], ['140 MWth', 'de responsabilité performance'], ['6 M$+', 'de contrat long terme piloté'], ['≈7 000', 'professionnels de la fiabilité touchés']],
+  intersection: 'Un profil. Trois disciplines.',
+  intersectionCopy: 'Les problèmes industriels difficiles ne restent pas dans une seule discipline. Mon travail relie jugement d’ingénieur, réalité opérationnelle et levier logiciel.',
+  pillars: [
+    ['01', 'Ingénierie de fiabilité', 'AMDEC, RCA, RCM, Weibull, RAM et stratégie d’actifs — de la donnée source aux décisions applicables sur le terrain.'],
+    ['02', 'Opérations industrielles', 'Expérience directe dans les mines, le GNL, l’énergie, la pétrochimie et l’industrie lourde, sur site et en bureau d’études.'],
+    ['03', 'IA & développement produit', 'Applications métier, systèmes de connaissance et automatisations qui retirent le travail administratif sans retirer la décision à l’ingénieur.']
+  ],
+  selected: 'Projets sélectionnés', selectedCopy: 'Une sélection ciblée de systèmes construits autour de vrais workflows de fiabilité — preuves, traçabilité et jugement humain inclus.',
+  career: 'Construit sur le terrain', careerCopy: 'De la conception de turbines à gaz et l’exploitation d’une centrale aux programmes internationaux de stratégie d’actifs et à l’IA industrielle.',
+  timeline: [
+    ['2023 — aujourd’hui', 'Ingénieur Référent Fiabilité', 'Baker Hughes · ARMS Reliability', 'Fiabilité internationale, disponibilité de production, stratégie de maintenance et ingénierie augmentée par l’IA.'],
+    ['2019 — 2023', 'Ingénieur Process & Fiabilité', 'Dalkia', 'Performance et fiabilité d’une centrale biomasse de 140 MWth ; GMAO, RCA et projets d’amélioration.'],
+    ['2017 — 2019', 'Ingénieur Fiabilité Maintenance', 'ARMS Reliability · Australie', 'Stratégies d’actifs miniers, AMDEC, Weibull, RCA Apollo et plans de maintenance prêts pour SAP.'],
+    ['2015 — 2017', 'Ingénieur Fiabilité Centrale', 'Koniambo Nickel', 'Deux turbines à gaz de 40 MW, quatre groupes diesel, arrêts, dépannage et gestion LTSA.'],
+    ['2011 — 2015', 'Ingénieur Mécanique', 'Capgemini · programmes Safran', 'Conception mécanique, calcul EF et fiabilité de composants de turbines à gaz.']
+  ],
+  thinking: 'La stratégie doit rester vivante.',
+  thinkingCopy: 'AMDEC, RCA, RCM et Weibull ne sont pas des documents isolés. Ce sont différentes lectures d’une même carte causale — une carte que l’IA peut enfin aider les ingénieurs à maintenir à jour.',
+  contexts: 'Environnements sélectionnés',
+  cta: 'Un rôle, un projet ou un partenariat à discuter ?',
+  ctaCopy: 'Si le sujet se situe à l’intersection de la fiabilité industrielle, de la data et de l’IA pratique, je suis toujours disponible pour un échange ciblé.'
+};
+---
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <p class="hero-role">{c.role}</p>
+      <p class="availability">{t.status}</p>
+      <h1>{c.titleA}<br /><span class="accent">{c.titleB}</span></h1>
+      <p class="lead">{c.intro}</p>
+      <div class="button-row">
+        <a class="button button-primary" href={r.work}>{t.viewWork}</a>
+        <a class="button button-secondary" href={r.contact}>{t.contactCta}</a>
+      </div>
+    </div>
+    <div class="portrait-frame">
+      <picture><source srcset="/images/josselin-bohler.avif" type="image/avif" /><img class="portrait" src="/images/josselin-bohler.webp" alt="Portrait professionnel de Josselin Bohler" width="900" height="900" fetchpriority="high" /></picture>
+    </div>
+  </div>
+  <div class="metrics-band">
+    <div class="container metrics">
+      {c.metric.map(([value, label]) => <div class="metric"><strong>{value}</strong><span>{label}</span></div>)}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="eyebrow">{locale === 'en' ? 'Where the work happens' : 'Là où le travail se joue'}</p>
+    <h2>{c.intersection}</h2>
+    <p class="lead">{c.intersectionCopy}</p>
+    <div class="pillars">
+      {c.pillars.map(([number, title, copy]) => <article class="pillar"><span class="pillar-number">{number}</span><h3>{title}</h3><p>{copy}</p></article>)}
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-head">
+      <div><p class="eyebrow">Portfolio</p><h2>{c.selected}</h2><p class="lead">{c.selectedCopy}</p></div>
+      <a class="button button-secondary" href={r.work}>{t.allWork}</a>
+    </div>
+    <div class="project-grid">
+      {projects.map(project => <ProjectCard project={project} locale={locale} href={casePath(project.data.slug)} />)}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div><p class="eyebrow">Experience</p><h2>{c.career}</h2><p class="lead">{c.careerCopy}</p></div>
+      <a class="button button-secondary" href={r.experience}>{t.fullExperience}</a>
+    </div>
+    <div class="timeline">
+      {c.timeline.map(([period, role, company, summary]) => <div class="timeline-row"><div class="timeline-period">{period}</div><div class="timeline-role"><strong>{role}</strong><span>{company}</span></div><div class="timeline-summary">{summary}</div></div>)}
+    </div>
+    <p class="eyebrow" style="margin-top:52px">{c.contexts}</p>
+    <div class="context-strip">
+      {['Moeve', 'OLT Offshore LNG Toscana', 'ONEOK', 'Airbus', 'Ok Tedi Mining', 'Fortescue', 'Gold Fields'].map(name => <span>{name}</span>)}
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark">
+  <div class="container insight-feature">
+    <div class="causal-chain" aria-label={locale === 'en' ? 'Living reliability causal chain' : 'Chaîne causale de fiabilité vivante'}>
+      {causalNodes.map((node, index) => <><div class="causal-node">{node}</div>{index < 5 && <div class="causal-arrow"></div>}</>)}
+    </div>
+    <div>
+      <p class="eyebrow">Living Reliability Strategy</p>
+      <h2>{c.thinking}</h2>
+      <p class="lead">{c.thinkingCopy}</p>
+      <div class="button-row"><a class="button button-primary" href={r.insight}>{locale === 'en' ? 'Read the manifesto' : 'Lire le manifeste'}</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="cta-panel">
+      <div><p class="eyebrow">Contact</p><h2>{c.cta}</h2><p>{c.ctaCopy}</p></div>
+      <a class="button button-primary" href={r.contact}>{t.contactCta}</a>
+    </div>
+  </div>
+</section>

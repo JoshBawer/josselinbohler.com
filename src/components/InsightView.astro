@@ -1,0 +1,32 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import { routes } from '../data/site';
+import type { Locale } from '../lib/types';
+
+interface Props { insight: CollectionEntry<'insights'>; locale: Locale; }
+const { insight, locale } = Astro.props;
+const { Content } = await render(insight);
+const r = routes[locale];
+const formattedDate = new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : 'fr-FR', {
+  day: 'numeric', month: 'long', year: 'numeric'
+}).format(insight.data.publishedAt);
+---
+
+<header class="page-hero">
+  <div class="container prose">
+    <p class="eyebrow">Living Reliability Strategy</p>
+    <h1>{insight.data.title}</h1>
+    <p class="lead">{insight.data.summary}</p>
+    <div class="article-meta"><span>{formattedDate}</span><span>{insight.data.readingTime}</span></div>
+  </div>
+</header>
+
+<article class="section">
+  <div class="container prose">
+    <Content />
+    <div class="button-row no-print">
+      <a class="button button-primary" href={r.contact}>{locale === 'en' ? 'Discuss the idea' : 'Échanger sur cette idée'}</a>
+      <a class="button button-secondary" href={r.work}>{locale === 'en' ? 'See the systems' : 'Voir les systèmes'}</a>
+    </div>
+  </div>
+</article>

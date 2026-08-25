@@ -1,0 +1,16 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import CaseStudyView from '../../../components/CaseStudyView.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('projects', ({ data }) => data.locale === 'fr');
+  return entries.map(project => ({ params: { slug: project.data.slug }, props: { project } }));
+}
+const { project } = Astro.props;
+const enEntry = (await getCollection('projects', ({ data }) => data.locale === 'en' && data.order === project.data.order))[0];
+---
+<BaseLayout locale="fr" title={project.data.title} description={project.data.summary} englishPath={`/work/${enEntry.data.slug}`} frenchPath={`/fr/projets/${project.data.slug}`} image={project.data.cover} imageAlt={project.data.coverAlt}>
+  <CaseStudyView project={project} locale="fr" />
+</BaseLayout>
+

@@ -1,0 +1,36 @@
+---
+import { routes, ui } from '../data/site';
+import type { Locale } from '../lib/types';
+
+interface Props { locale: Locale; currentPath: string; englishPath: string; frenchPath: string; }
+const { locale, currentPath, englishPath, frenchPath } = Astro.props;
+const t = ui[locale];
+const r = routes[locale];
+const alternate = locale === 'en' ? frenchPath : englishPath;
+const links = [
+  [r.home, t.nav.home], [r.work, t.nav.work], [r.experience, t.nav.experience], [r.insight, t.nav.insight]
+];
+const isCurrent = (href: string) => href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href={r.home}>
+      <span class="brand-mark" aria-hidden="true">JB<span>/</span></span>
+      <span class="brand-name">Josselin Bohler</span>
+    </a>
+    <nav class="desktop-nav" aria-label={locale === 'en' ? 'Primary navigation' : 'Navigation principale'}>
+      {links.map(([href, label]) => <a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>)}
+      <a class="nav-cta" href={r.contact} aria-current={isCurrent(r.contact) ? 'page' : undefined}>{t.nav.contact}</a>
+      <a class="language-link" href={alternate} lang={locale === 'en' ? 'fr' : 'en'} hreflang={locale === 'en' ? 'fr' : 'en'}>{t.language}</a>
+    </nav>
+    <details class="mobile-menu">
+      <summary>{t.menu}</summary>
+      <nav aria-label={locale === 'en' ? 'Mobile navigation' : 'Navigation mobile'}>
+        {links.map(([href, label]) => <a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>)}
+        <a href={r.contact} aria-current={isCurrent(r.contact) ? 'page' : undefined}>{t.nav.contact}</a>
+        <a class="language-link" href={alternate} lang={locale === 'en' ? 'fr' : 'en'} hreflang={locale === 'en' ? 'fr' : 'en'}>{t.language}</a>
+      </nav>
+    </details>
+  </div>
+</header>

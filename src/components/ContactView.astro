@@ -1,0 +1,53 @@
+---
+import { routes, site } from '../data/site';
+import type { Locale } from '../lib/types';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const r = routes[locale];
+const c = locale === 'en' ? {
+  eyebrow: 'Contact', title: 'Start with the problem.',
+  intro: 'Role, industrial project or partnership — send enough context to make the first conversation useful. I read every message personally.',
+  labels: { name: 'Name', email: 'Professional email', org: 'Organisation (optional)', type: 'What would you like to discuss?', message: 'Message', consent: 'I agree that Josselin Bohler may use this information to reply to my request. No newsletter or marketing list.', send: 'Send message' },
+  options: [['', 'Select one'], ['Role', 'A role or career opportunity'], ['Project', 'An industrial project'], ['Partnership', 'A partnership'], ['Other', 'Something else']],
+  response: 'Typical response', responseValue: 'Within 2–3 working days', privacy: 'Your message is used only to answer this request and is deleted no later than 12 months after the last exchange.', linkedin: 'Prefer LinkedIn?'
+} : {
+  eyebrow: 'Contact', title: 'Commençons par le problème.',
+  intro: 'Rôle, projet industriel ou partenariat — donnez suffisamment de contexte pour rendre le premier échange utile. Je lis chaque message personnellement.',
+  labels: { name: 'Nom', email: 'Email professionnel', org: 'Organisation (facultatif)', type: 'Quel sujet souhaitez-vous aborder ?', message: 'Message', consent: 'J’accepte que Josselin Bohler utilise ces informations pour répondre à ma demande. Aucune newsletter ni liste marketing.', send: 'Envoyer le message' },
+  options: [['', 'Choisir'], ['Role', 'Un rôle ou une opportunité professionnelle'], ['Project', 'Un projet industriel'], ['Partnership', 'Un partenariat'], ['Other', 'Autre chose']],
+  response: 'Délai habituel', responseValue: 'Sous 2 à 3 jours ouvrés', privacy: 'Le message sert uniquement à répondre à cette demande et sera supprimé au plus tard 12 mois après le dernier échange.', linkedin: 'Vous préférez LinkedIn ?'
+};
+---
+
+<header class="page-hero">
+  <div class="container"><p class="eyebrow">{c.eyebrow}</p><h1>{c.title}</h1><p class="lead">{c.intro}</p></div>
+</header>
+
+<section class="section">
+  <div class="container contact-grid">
+    <aside>
+      <p class="eyebrow">Direct</p>
+      <h2>{locale === 'en' ? 'A focused conversation.' : 'Un échange ciblé.'}</h2>
+      <p class="lead">{locale === 'en' ? 'The strongest fit is work connecting reliability engineering, industrial operations and practical AI.' : 'Les sujets les plus pertinents relient fiabilité, opérations industrielles et IA pratique.'}</p>
+      <div class="contact-points">
+        <div class="contact-point"><span>{c.response}</span><strong>{c.responseValue}</strong></div>
+        <div class="contact-point"><span>{c.linkedin}</span><a class="text-link" href={site.linkedin} target="_blank" rel="noopener noreferrer">linkedin.com/in/josselinbohler</a></div>
+      </div>
+    </aside>
+    <form class="contact-form" name="professional-contact" method="POST" action={r.thanks} data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="professional-contact" />
+      <p class="hidden-field"><label>Do not fill this field <input name="bot-field" /></label></p>
+      <input type="hidden" name="locale" value={locale} />
+      <div class="form-grid">
+        <div class="field"><label for="name">{c.labels.name}</label><input id="name" name="name" autocomplete="name" required maxlength="100" /></div>
+        <div class="field"><label for="email">{c.labels.email}</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="160" /></div>
+        <div class="field field-full"><label for="organization">{c.labels.org}</label><input id="organization" name="organization" autocomplete="organization" maxlength="160" /></div>
+        <div class="field field-full"><label for="inquiryType">{c.labels.type}</label><select id="inquiryType" name="inquiryType" required>{c.options.map(([value, label]) => <option value={value} disabled={value === ''} selected={value === ''}>{label}</option>)}</select></div>
+        <div class="field field-full"><label for="message">{c.labels.message}</label><textarea id="message" name="message" required minlength="20" maxlength="4000"></textarea></div>
+      </div>
+      <label class="consent"><input type="checkbox" name="consent" value="yes" required /><span>{c.labels.consent}</span></label>
+      <button class="button button-primary" type="submit">{c.labels.send}</button>
+      <p class="form-note">{c.privacy} <a href={r.privacy}>{locale === 'en' ? 'Privacy details' : 'Détails de confidentialité'}</a>.</p>
+    </form>
+  </div>
+</section>

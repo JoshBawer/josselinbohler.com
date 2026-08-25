@@ -1,0 +1,92 @@
+---
+import { routes } from '../data/site';
+import type { Locale } from '../lib/types';
+
+interface Props { locale: Locale; kind: 'privacy' | 'legal'; }
+const { locale, kind } = Astro.props;
+const r = routes[locale];
+---
+
+{kind === 'privacy' && locale === 'en' && (
+  <>
+    <header class="page-hero"><div class="container legal-copy"><p class="eyebrow">Privacy</p><h1>Clear, minimal data use.</h1><p class="lead">This site has no advertising cookies, marketing tracker or analytics. Personal data is collected only when you choose to make contact.</p></div></header>
+    <article class="section"><div class="container legal-copy">
+      <p class="article-meta"><span>Last updated: 25 August 2026</span></p>
+      <h2>Who is responsible</h2>
+      <p>Josselin Bohler is responsible for the personal data submitted through this professional portfolio. You can reach the data controller through the <a href={r.contact}>contact form</a>.</p>
+      <h2>Information collected</h2>
+      <p>The form collects your name, email address, optional organisation, enquiry category, message, consent and technical anti-spam field. Please do not submit confidential, regulated or client-sensitive information.</p>
+      <h2>Purpose and legal basis</h2>
+      <p>The information is used only to understand and answer your request about a role, project, partnership or other professional subject. Processing is based on your request and consent, and on the legitimate interest in managing professional correspondence. It is not added to a newsletter or marketing list.</p>
+      <h2>Recipients and hosting</h2>
+      <p>Messages are accessible to Josselin Bohler and processed by Netlify as the site and form hosting provider. Netlify may process data outside the European Economic Area under the safeguards described in its privacy documentation. Data is not sold.</p>
+      <h2>Retention</h2>
+      <p>Form submissions and related correspondence are deleted no later than 12 months after the last exchange, unless a longer period is required to establish, exercise or defend legal rights.</p>
+      <h2>Your rights</h2>
+      <p>Depending on the applicable rules, you may request access, correction, deletion, restriction or portability, and object to processing or withdraw consent. Use the contact form and identify the email address concerned. You may also lodge a complaint with the CNIL or your local supervisory authority.</p>
+      <h2>Cookies and external links</h2>
+      <p>No analytics or advertising cookie is installed in version 1 of this site. External services such as LinkedIn or GitHub apply their own privacy rules when you follow a link to them.</p>
+    </div></article>
+  </>
+)}
+
+{kind === 'privacy' && locale === 'fr' && (
+  <>
+    <header class="page-hero"><div class="container legal-copy"><p class="eyebrow">Confidentialité</p><h1>Une utilisation claire et minimale des données.</h1><p class="lead">Ce site ne contient aucun cookie publicitaire, traceur marketing ou outil analytics. Des données personnelles sont collectées uniquement si vous choisissez de prendre contact.</p></div></header>
+    <article class="section"><div class="container legal-copy">
+      <p class="article-meta"><span>Dernière mise à jour : 25 août 2026</span></p>
+      <h2>Responsable du traitement</h2>
+      <p>Josselin Bohler est responsable des données personnelles envoyées depuis ce portfolio professionnel. Vous pouvez contacter le responsable via le <a href={r.contact}>formulaire de contact</a>.</p>
+      <h2>Données collectées</h2>
+      <p>Le formulaire collecte votre nom, adresse email, organisation facultative, catégorie de demande, message, consentement et champ technique anti-spam. Merci de ne pas transmettre d’information confidentielle, réglementée ou sensible pour un client.</p>
+      <h2>Finalité et base légale</h2>
+      <p>Ces informations servent uniquement à comprendre et traiter votre demande concernant un rôle, un projet, un partenariat ou un autre sujet professionnel. Le traitement repose sur votre demande et votre consentement, ainsi que sur l’intérêt légitime à gérer les échanges professionnels. Les données ne rejoignent aucune newsletter ou liste marketing.</p>
+      <h2>Destinataires et hébergement</h2>
+      <p>Les messages sont accessibles à Josselin Bohler et traités par Netlify en qualité d’hébergeur du site et du formulaire. Netlify peut traiter des données hors de l’Espace économique européen selon les garanties décrites dans sa documentation de confidentialité. Les données ne sont pas vendues.</p>
+      <h2>Conservation</h2>
+      <p>Les soumissions et échanges associés sont supprimés au plus tard 12 mois après le dernier échange, sauf durée supérieure nécessaire pour constater, exercer ou défendre un droit.</p>
+      <h2>Vos droits</h2>
+      <p>Selon les règles applicables, vous pouvez demander l’accès, la rectification, l’effacement, la limitation ou la portabilité, vous opposer au traitement ou retirer votre consentement. Utilisez le formulaire en précisant l’adresse email concernée. Vous pouvez également introduire une réclamation auprès de la CNIL.</p>
+      <h2>Cookies et liens externes</h2>
+      <p>Aucun cookie analytics ou publicitaire n’est installé dans la première version du site. Les services externes comme LinkedIn ou GitHub appliquent leurs propres règles lorsque vous suivez un lien vers leur plateforme.</p>
+    </div></article>
+  </>
+)}
+
+{kind === 'legal' && locale === 'en' && (
+  <>
+    <header class="page-hero"><div class="container legal-copy"><p class="eyebrow">Legal notice</p><h1>A personal professional portfolio.</h1><p class="lead">Publisher, hosting and the boundaries of Reliability Factory.</p></div></header>
+    <article class="section"><div class="container legal-copy">
+      <p class="article-meta"><span>Last updated: 25 August 2026</span></p>
+      <h2>Publisher and publication director</h2>
+      <p>This non-commercial professional portfolio is published by Josselin Bohler, an individual based in France. The publication director is Josselin Bohler. Contact is available through the <a href={r.contact}>site form</a>.</p>
+      <h2>Hosting</h2>
+      <p>The site is hosted by Netlify, Inc., 44 Montgomery Street, Suite 300, San Francisco, California 94104, United States.</p>
+      <h2>Reliability Factory</h2>
+      <p>Reliability Factory is the name of a personal product and research initiative. It is not presented on this site as an incorporated company, regulated provider or separate legal entity. No price, online sale or contractual offer is made here.</p>
+      <h2>Professional context</h2>
+      <p>Company and project names are mentioned only to describe professional experience and working context. Their inclusion does not imply endorsement, sponsorship or a current commercial relationship. No client logo or confidential client material is published.</p>
+      <h2>Intellectual property and accuracy</h2>
+      <p>Unless stated otherwise, the text, original visuals, interface captures and source structure of this site are protected by their respective rights. Brand names remain the property of their owners. Information is reviewed carefully but may evolve; project statuses distinguish prototypes, internal tools, published work and archived experiments.</p>
+    </div></article>
+  </>
+)}
+
+{kind === 'legal' && locale === 'fr' && (
+  <>
+    <header class="page-hero"><div class="container legal-copy"><p class="eyebrow">Mentions légales</p><h1>Un portfolio professionnel personnel.</h1><p class="lead">Édition, hébergement et périmètre de Reliability Factory.</p></div></header>
+    <article class="section"><div class="container legal-copy">
+      <p class="article-meta"><span>Dernière mise à jour : 25 août 2026</span></p>
+      <h2>Éditeur et directeur de la publication</h2>
+      <p>Ce portfolio professionnel non commercial est édité par Josselin Bohler, particulier établi en France. Le directeur de la publication est Josselin Bohler. Le contact s’effectue depuis le <a href={r.contact}>formulaire du site</a>.</p>
+      <h2>Hébergement</h2>
+      <p>Le site est hébergé par Netlify, Inc., 44 Montgomery Street, Suite 300, San Francisco, California 94104, États-Unis.</p>
+      <h2>Reliability Factory</h2>
+      <p>Reliability Factory est le nom d’une initiative personnelle de développement produit et de recherche. Elle n’est pas présentée ici comme une société constituée, un prestataire réglementé ou une personne morale distincte. Aucun tarif, vente en ligne ou offre contractuelle n’est proposé sur ce site.</p>
+      <h2>Contexte professionnel</h2>
+      <p>Les noms d’entreprises et de projets sont cités uniquement pour décrire une expérience et son contexte. Leur présence ne constitue ni approbation, ni parrainage, ni indication d’une relation commerciale actuelle. Aucun logo client ou document client confidentiel n’est publié.</p>
+      <h2>Propriété intellectuelle et exactitude</h2>
+      <p>Sauf mention contraire, les textes, visuels originaux, captures d’interface et la structure source de ce site sont protégés par leurs droits respectifs. Les marques citées restent la propriété de leurs titulaires. Les informations sont vérifiées avec soin mais peuvent évoluer ; les statuts distinguent les prototypes, outils internes, travaux publiés et expérimentations archivées.</p>
+    </div></article>
+  </>
+)}

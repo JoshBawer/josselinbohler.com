@@ -1,0 +1,51 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import { routes, statusLabels, ui } from '../data/site';
+import type { Locale } from '../lib/types';
+
+interface Props { project: CollectionEntry<'projects'>; locale: Locale; }
+const { project, locale } = Astro.props;
+const { Content } = await render(project);
+const p = project.data;
+const r = routes[locale];
+const t = ui[locale];
+const avifCover = p.cover.replace(/\.webp$/, '.avif');
+---
+
+<header class="case-hero">
+  <div class="container">
+    <p class="eyebrow">{p.eyebrow}</p>
+    <h1>{p.title}</h1>
+    <p class="lead">{p.summary}</p>
+    <div class="case-meta">
+      <div><span>{locale === 'en' ? 'Status' : 'Statut'}</span><strong>{statusLabels[locale][p.status]}</strong></div>
+      <div><span>{locale === 'en' ? 'Role' : 'Rôle'}</span><strong>{p.role}</strong></div>
+      <div><span>{locale === 'en' ? 'Built' : 'Réalisé'}</span><strong>{p.year}</strong></div>
+    </div>
+    <div class="case-cover"><picture><source srcset={avifCover} type="image/avif" /><img src={p.cover} alt={p.coverAlt} width="1600" height="1000" /></picture></div>
+  </div>
+</header>
+
+<article class="container case-body">
+  <aside class="case-sidebar" aria-label={locale === 'en' ? 'Project facts' : 'Données du projet'}>
+    <div class="case-proof-grid">
+      {p.proofs.map(proof => <div class="case-proof"><strong>{proof.value}</strong><span>{proof.label}</span></div>)}
+    </div>
+    <p class="eyebrow">Stack</p>
+    <div class="stack-list">{p.stack.map(item => <span>{item}</span>)}</div>
+    {p.links && <div class="button-row">{p.links.map(link => <a class="button button-secondary" href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>)}</div>}
+  </aside>
+  <div class="case-copy">
+    <h2>{locale === 'en' ? 'The problem' : 'Le problème'}</h2>
+    <p>{p.problem}</p>
+    <h2>{locale === 'en' ? 'The approach' : 'L’approche'}</h2>
+    <ul>{p.approach.map(item => <li>{item}</li>)}</ul>
+    <h2>{locale === 'en' ? 'What it demonstrated' : 'Ce que le projet démontre'}</h2>
+    <p>{p.outcome}</p>
+    <Content />
+    <div class="button-row no-print">
+      <a class="button button-primary" href={r.contact}>{t.contactCta}</a>
+      <a class="button button-secondary" href={r.work}>{t.allWork}</a>
+    </div>
+  </div>
+</article>
