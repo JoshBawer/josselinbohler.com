@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "npm run audit:content && astro build",
+    "build": "npm run audit:content && astro build && npm run audit:built",
     "preview": "astro preview",
     "check": "astro check",
     "test": "npm run check && npm run build && npm run test:e2e",
     "test:e2e": "playwright test",
     "audit:content": "node scripts/audit-content.mjs",
+    "audit:built": "node scripts/audit-built-site.mjs",
     "audit:lighthouse": "lhci autorun"
   },
   "dependencies": {

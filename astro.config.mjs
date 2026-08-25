@@ -14,9 +14,10 @@ export default defineConfig({
       fallbackType: 'redirect'
     }
   },
-  integrations: [sitemap()],
+  integrations: [sitemap({
+    filter: (page) => !['/404', '/fr/404', '/thanks', '/fr/merci'].includes(new URL(page).pathname.replace(/\/$/, '') || '/')
+  })],
   build: {
     format: 'directory'
   }
 });
-
